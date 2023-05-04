@@ -7,8 +7,14 @@
     <title>Document</title>
 </head>
 <body>
-    <h3>
-        <?php echo "Hello World"?>
-    </h3>
+    <form action="" method="post">
+        <input type="text" placeholder="input text" name="text">
+        <button type="submit">add text</button>
+    </form>
+
+    <?php
+        $text = $_POST['text'];
+        echo $text;
+    ?>
 </body>
 </html>
