@@ -18,6 +18,10 @@
 *    4  4  4  4
 *    5  5  5  5  5
 *    и т.д.
+*
+*    4)
+*    отрисовать шахматную доску с черно-былыми квадратами
+*
 */
 
 //1)
@@ -51,4 +55,49 @@ for($i = 1; $i <= 5; $i++) {
 
     echo '<br>';
 }
+
+echo '<br>' . '<br>';
+
+//4)
+
 ?>
+<!DOCTYPE html>
+<html> 
+<head> 
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body> 
+
+<table border='1' style='border-collapse:collapse;'>
+
+<?php
+for($i = 1;$i <=8 ;$i++)
+{
+  echo "<tr>";
+  for($j = 1;$j <= 8;$j++)
+  { 
+    if($i % 2 != 0) {
+        if($j % 2 == 0) {
+            echo "<td width='25px' height='25px' bgcolor=#000000></td>";
+        }
+        else {
+            echo "<td width='25px' height='25px'></td>";
+        }
+    }
+    else {
+        if($j % 2 != 0) {
+            echo "<td width='25px' height='25px' bgcolor=#000000></td>";
+        }
+        else {
+            echo "<td width='25px' height='25px'></td>";
+        }
+    }
+    
+  }
+  echo "</tr>";
+}
+?>
+</table>
+</body>
+</html>
