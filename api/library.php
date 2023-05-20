@@ -4,26 +4,12 @@ require_once('vendor/autoload.php');
 
 date_default_timezone_set('Europe/Moscow');
 
+
 // версия апи
 $version = '5.131';
 
 // ключ доступа
 $access_token = '8cabd1728cabd1728cabd1724e8fbff34988cab8cabd172e8cc7b061ba94a0638feaccd';
-
-$url = "https://api.vk.com/method/friends.get?user_id=256215124&order=random&fields=photo_max,city,sex,last_seen&count=5&access_token=$access_token&v=$version";
-
-
-$client = new \GuzzleHttp\Client(['verify' => false]);
-
-$response = $client->request('GET', $url, [
-  'headers' => [
-    'accept' => 'application/json',
-  ],
-]);
-
-
-$arr = json_decode($response->getBody(), true);
-$entryPoint = $arr["response"]["items"];
 
 ?>
 <!DOCTYPE html>
@@ -35,6 +21,47 @@ $entryPoint = $arr["response"]["items"];
     <title>Document</title>
 </head>
 <body>
+
+<h2>Получить 5 рандомных друзей по ссылке на страницу</h2>
+
+<form method="post">
+  <input type="text" name="userUrl" placeholder="Введите ссылку на вк">
+  <button type="submit" name="submit">Отправить</button>
+</form>
+
+<?php
+
+if(isset($_POST["submit"])) {
+  $client = new \GuzzleHttp\Client(['verify' => false]);
+
+  $screenName = basename($_POST['userUrl']);
+
+  //запрос на получение user_id
+  $userGet = "https://api.vk.com/method/users.get?user_ids=$screenName&access_token=$access_token&v=$version";
+
+  $response = $client->request('GET', $userGet, [
+    'headers' => [
+      'accept' => 'application/json',
+    ],
+  ]);
+
+  $arr = json_decode($response->getBody(), true);
+
+  $userId = $arr["response"][0]["id"];
+
+  $friendsGet = "https://api.vk.com/method/friends.get?user_id=$userId&order=random&fields=photo_max,city,sex,last_seen&count=5&access_token=$access_token&v=$version";
+
+  $response = $client->request('GET', $friendsGet, [
+    'headers' => [
+      'accept' => 'application/json',
+    ],
+  ]);
+
+  $arr = json_decode($response->getBody(), true);
+  $entryPoint = $arr["response"]["items"];
+
+
+?>
     <center>
         <?php for($i = 0; $i < count($entryPoint); $i++) : ?>
             <h4>Имя: <?= $entryPoint[$i]["first_name"];?></h4>
@@ -47,5 +74,8 @@ $entryPoint = $arr["response"]["items"];
             <br><br>
         <?php endfor; ?>
     </center>
+<?php
+}
+?>
 </body>
 </html>
